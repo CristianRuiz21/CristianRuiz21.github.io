@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disco de Vinilo - YouTube oculto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Sorpresa Romántica - Música y Flores</title>
     <style>
         * {
             margin: 0;
@@ -11,60 +11,133 @@
             box-sizing: border-box;
         }
 
+        /* Fondo romántico con rosas sutiles */
         body {
-            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 100%);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Contenedor del disco */
-        .record-container {
+        /* Patrón de rosas muy tenue (fondo discreto) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/roses-pattern.png');
+            background-repeat: repeat;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Contenedor central para tu mensaje o detalles románticos */
+        .romantic-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .romantic-content h1 {
+            font-size: 3rem;
+            color: #b22234;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease;
+        }
+
+        .romantic-content p {
+            font-size: 1.3rem;
+            color: #6b3e3e;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            background: rgba(255,255,240,0.6);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(3px);
+        }
+
+        /* Corazón flotante animado (detalle) */
+        .floating-heart {
+            font-size: 2rem;
+            animation: float 3s infinite ease-in-out;
+            display: inline-block;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* ---------- DISCO DE VINILO EN ESQUINA ---------- */
+        .record-corner {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
             cursor: pointer;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.3));
             transition: transform 0.2s ease;
         }
-        .record-container:hover {
-            transform: scale(1.02);
+        .record-corner:hover {
+            transform: scale(1.05);
         }
 
-        /* Disco de vinilo */
-        .vinyl {
-            width: 300px;
-            height: 300px;
+        /* Disco de vinilo (tamaño más pequeño para esquina) */
+        .vinyl-small {
+            width: 100px;
+            height: 100px;
             background: radial-gradient(circle at 30% 30%, #222, #000);
             border-radius: 50%;
             position: relative;
-            box-shadow: 0 0 0 8px #f5f5dc, 0 0 0 12px #b8860b, 0 20px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 0 0 4px #f5f5dc, 0 0 0 6px #b8860b;
             transition: box-shadow 0.2s;
-            animation: rotateVinyl 0s infinite linear;
+            animation: none; /* Sin giro hasta que se active el sonido */
         }
 
-        /* Etiqueta central */
-        .vinyl::before {
+        .vinyl-small::before {
             content: "🎵";
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
+            width: 30px;
+            height: 30px;
             background: radial-gradient(circle, #f1c40f, #e67e22);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #2c3e50;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.3), 0 0 0 3px #fff5e0;
-            font-family: monospace;
+            font-size: 1rem;
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.3), 0 0 0 2px #fff5e0;
         }
 
-        /* Surcos del vinilo (opcional) */
-        .vinyl::after {
+        /* Surcos sutiles */
+        .vinyl-small::after {
             content: "";
             position: absolute;
             top: 15%;
@@ -72,105 +145,156 @@
             width: 70%;
             height: 70%;
             border-radius: 50%;
-            background: repeating-radial-gradient(circle at center, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 8px);
+            background: repeating-radial-gradient(circle at center, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 5px);
             pointer-events: none;
         }
 
-        /* Animación de giro */
-        @keyframes rotateVinyl {
+        /* Animación de giro (se activa con JS) */
+        @keyframes spinRecord {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
-        /* Botón de estado (opcional) */
-        .info {
-            text-align: center;
-            margin-top: 40px;
-            color: white;
-            background: rgba(0,0,0,0.6);
-            padding: 12px 24px;
-            border-radius: 40px;
-            backdrop-filter: blur(4px);
-            font-size: 0.9rem;
+        .vinyl-spin {
+            animation: spinRecord 2s infinite linear;
         }
 
-        .info span {
-            font-weight: bold;
-            color: #f1c40f;
+        /* Mensaje de estado (pequeño, junto al disco) */
+        .status-message {
+            position: fixed;
+            bottom: 140px;
+            right: 30px;
+            background: rgba(0,0,0,0.6);
+            color: #ffefd5;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+            pointer-events: none;
+        }
+
+        /* Reproductor de YouTube: INVISIBLE y en esquina también (por si acaso) */
+        #youtube-player {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Responsive: ajustar en móviles */
+        @media (max-width: 600px) {
+            .vinyl-small { width: 70px; height: 70px; }
+            .record-corner { bottom: 15px; right: 15px; }
+            .status-message { bottom: 100px; right: 15px; font-size: 0.65rem; }
+            .romantic-content h1 { font-size: 2rem; }
+            .romantic-content p { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-<div style="text-align: center;">
-    <!-- Elemento visual: el disco de vinilo (al hacer clic activa el sonido) -->
-    <div class="record-container" id="record">
-        <div class="vinyl" id="vinylDisc"></div>
+    <!-- Contenido romántico (puedes editar libremente) -->
+    <div class="romantic-content">
+        <h1>✨ Para ti ✨</h1>
+        <p>
+            <span class="floating-heart">❤️</span> 
+            Cada latido me recuerda que te tengo cerca. 
+            <span class="floating-heart">🌸</span>
+        </p>
+        <p>
+            Haz clic en el disco de vinilo para que la música acompañe este momento.<br>
+            (Un solo clic y el sonido se activará)
+        </p>
+        <!-- Aquí puedes añadir más: fotos, carta, contador, etc. -->
     </div>
-    <div class="info" id="statusMsg">
-        🎧 Disco listo. <span>Haz clic en el vinilo</span> para activar el sonido.
+
+    <!-- Reproductor de YouTube oculto (se carga automáticamente) -->
+    <div id="youtube-player"></div>
+
+    <!-- Disco de vinilo en esquina -->
+    <div class="record-corner" id="vinylButton">
+        <div class="vinyl-small" id="vinylDisc"></div>
     </div>
-</div>
+    <div class="status-message" id="statusMsg">🎵 Disco listo · Haz clic</div>
 
-<!-- Reproductor de YouTube oculto (invisible pero reproduce) -->
-<div id="youtube-player" style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;"></div>
+    <!-- Cargar API de YouTube -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 
-<script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player;
+        let soundActivated = false;
+        const vinylDisc = document.getElementById('vinylDisc');
+        const vinylButton = document.getElementById('vinylButton');
+        const statusDiv = document.getElementById('statusMsg');
 
-<script>
-    let player;
-    let soundActivated = false;  // para controlar que no se active dos veces
-    const vinylDisc = document.getElementById('vinylDisc');
-    const statusDiv = document.getElementById('statusMsg');
+        // Al hacer clic en el disco (un solo clic) activamos sonido y giro
+        vinylButton.addEventListener('click', function() {
+            if (!soundActivated && player && typeof player.unMute === 'function') {
+                // Activar sonido
+                player.unMute();
+                player.setVolume(100);
+                soundActivated = true;
 
-    // Al hacer clic en el disco, activamos el sonido y comenzamos la animación de giro
-    document.getElementById('record').addEventListener('click', function() {
-        if (!soundActivated && player && typeof player.unMute === 'function') {
-            // Activar sonido y volumen alto
-            player.unMute();
-            player.setVolume(100);
-            soundActivated = true;
+                // Iniciar animación de giro
+                vinylDisc.classList.add('vinyl-spin');
 
-            // Cambiar mensaje
-            statusDiv.innerHTML = '💿 Sonido activado · El vinilo está girando 🎶';
-            // Iniciar la animación de giro
-            vinylDisc.style.animation = 'rotateVinyl 2s infinite linear';
+                // Cambiar mensaje
+                statusDiv.innerHTML = '🎶 Música sonando · Disco girando 💖';
+                statusDiv.style.background = "rgba(180, 40, 60, 0.8)";
 
-            // Opcional: pequeño efecto visual en el disco
-            vinylDisc.style.boxShadow = '0 0 0 8px #ffd966, 0 0 0 12px #ffaa33, 0 20px 30px black';
-        } else if (!soundActivated) {
-            statusDiv.innerHTML = '⏳ Cargando reproductor... inténtalo de nuevo en un segundo.';
-        }
-    });
+                // Opcional: pequeño efecto de "pulso" en el disco
+                vinylDisc.style.boxShadow = '0 0 0 4px #ffb347, 0 0 0 6px #ff8c00';
 
-    // Función que llama la API de YouTube
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube-player', {
-            height: '0',
-            width: '0',
-            videoId: 'p9j_HawFZhA',   // <--- Pon aquí el ID de TU video
-            playerVars: {
-                autoplay: 1,      // empieza a reproducir silenciado
-                mute: 1,          // obligatorio para autoplay
-                controls: 0,
-                disablekb: 1,
-                playsinline: 1,
-                modestbranding: 1,
-                rel: 0
-            },
-            events: {
-                'onReady': onPlayerReady
+                // También puedes hacer algo en el contenido romántico, como mostrar un mensaje extra
+                const romanticText = document.querySelector('.romantic-content p:last-child');
+                if (romanticText) {
+                    romanticText.innerHTML += '<br><span style="color:#c0392b;">❤️ Ahora suena nuestra canción... ❤️</span>';
+                }
+            } else if (!soundActivated) {
+                statusDiv.innerHTML = '⏳ Espera un momento... el reproductor se está cargando';
+                setTimeout(() => {
+                    if (!soundActivated) statusDiv.innerHTML = '🎵 Haz clic de nuevo cuando esté listo';
+                }, 1000);
             }
         });
-    }
 
-    function onPlayerReady(event) {
-        // El video ya se está reproduciendo (en mute)
-        event.target.playVideo();
-        // Podemos ocultar el mensaje de carga si queremos
-        statusDiv.innerHTML = '✅ Reproductor listo. <span>Haz clic en el vinilo</span> para escuchar el sonido.';
-    }
-</script>
+        // Función llamada automáticamente por la API de YouTube
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'p9j_HawFZhA',   // Cambia por el ID de tu canción romántica
+                playerVars: {
+                    autoplay: 1,      // Comienza a reproducirse automáticamente (silenciado)
+                    mute: 1,          // Obligatorio para autoplay
+                    controls: 0,
+                    disablekb: 1,
+                    playsinline: 1,
+                    modestbranding: 1,
+                    rel: 0
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
 
+        function onPlayerReady(event) {
+            // El video ya está sonando (en silencio)
+            event.target.playVideo();
+            statusDiv.innerHTML = '✅ Listo · Haz clic en el disco para escuchar';
+            // Después de 1 segundo, si no ha hecho clic, recordatorio
+            setTimeout(() => {
+                if (!soundActivated) {
+                    statusDiv.innerHTML = '💿 Toca el disco para activar el sonido';
+                }
+            }, 1500);
+        }
+    </script>
 </body>
 </html>
