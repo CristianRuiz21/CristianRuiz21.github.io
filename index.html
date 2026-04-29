@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Prueba YouTube</title>
+</head>
+<body>
+
+<div id="player"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+var player;
+
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '360',
+        width: '640',
+        videoId: 'p9j_HawFZhA',
+        playerVars: {
+            autoplay: 1,
+            mute: 1
+        },
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    event.target.playVideo();
+
+    setTimeout(() => {
+        player.unMute();
+        player.setVolume(100);
+    }, 3000);
+}
+</script>
+
+</body>
+</html>
