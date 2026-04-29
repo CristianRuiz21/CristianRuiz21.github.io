@@ -1,41 +1,175 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Prueba YouTube</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disco de Vinilo - YouTube oculto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Contenedor del disco */
+        .record-container {
+            cursor: pointer;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+            transition: transform 0.2s ease;
+        }
+        .record-container:hover {
+            transform: scale(1.02);
+        }
+
+        /* Disco de vinilo */
+        .vinyl {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at 30% 30%, #222, #000);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 0 8px #f5f5dc, 0 0 0 12px #b8860b, 0 20px 30px rgba(0,0,0,0.5);
+            transition: box-shadow 0.2s;
+            animation: rotateVinyl 0s infinite linear;
+        }
+
+        /* Etiqueta central */
+        .vinyl::before {
+            content: "🎵";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle, #f1c40f, #e67e22);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.3), 0 0 0 3px #fff5e0;
+            font-family: monospace;
+        }
+
+        /* Surcos del vinilo (opcional) */
+        .vinyl::after {
+            content: "";
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            width: 70%;
+            height: 70%;
+            border-radius: 50%;
+            background: repeating-radial-gradient(circle at center, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+        }
+
+        /* Animación de giro */
+        @keyframes rotateVinyl {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Botón de estado (opcional) */
+        .info {
+            text-align: center;
+            margin-top: 40px;
+            color: white;
+            background: rgba(0,0,0,0.6);
+            padding: 12px 24px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+            font-size: 0.9rem;
+        }
+
+        .info span {
+            font-weight: bold;
+            color: #f1c40f;
+        }
+    </style>
 </head>
 <body>
 
-<div id="player"></div>
+<div style="text-align: center;">
+    <!-- Elemento visual: el disco de vinilo (al hacer clic activa el sonido) -->
+    <div class="record-container" id="record">
+        <div class="vinyl" id="vinylDisc"></div>
+    </div>
+    <div class="info" id="statusMsg">
+        🎧 Disco listo. <span>Haz clic en el vinilo</span> para activar el sonido.
+    </div>
+</div>
+
+<!-- Reproductor de YouTube oculto (invisible pero reproduce) -->
+<div id="youtube-player" style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;"></div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-var player;
+    let player;
+    let soundActivated = false;  // para controlar que no se active dos veces
+    const vinylDisc = document.getElementById('vinylDisc');
+    const statusDiv = document.getElementById('statusMsg');
 
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '360',
-        width: '640',
-        videoId: 'p9j_HawFZhA',
-        playerVars: {
-            autoplay: 1,
-            mute: 1
-        },
-        events: {
-            'onReady': onPlayerReady
+    // Al hacer clic en el disco, activamos el sonido y comenzamos la animación de giro
+    document.getElementById('record').addEventListener('click', function() {
+        if (!soundActivated && player && typeof player.unMute === 'function') {
+            // Activar sonido y volumen alto
+            player.unMute();
+            player.setVolume(100);
+            soundActivated = true;
+
+            // Cambiar mensaje
+            statusDiv.innerHTML = '💿 Sonido activado · El vinilo está girando 🎶';
+            // Iniciar la animación de giro
+            vinylDisc.style.animation = 'rotateVinyl 2s infinite linear';
+
+            // Opcional: pequeño efecto visual en el disco
+            vinylDisc.style.boxShadow = '0 0 0 8px #ffd966, 0 0 0 12px #ffaa33, 0 20px 30px black';
+        } else if (!soundActivated) {
+            statusDiv.innerHTML = '⏳ Cargando reproductor... inténtalo de nuevo en un segundo.';
         }
     });
-}
 
-function onPlayerReady(event) {
-    event.target.playVideo();
+    // Función que llama la API de YouTube
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-player', {
+            height: '0',
+            width: '0',
+            videoId: 'p9j_HawFZhA',   // <--- Pon aquí el ID de TU video
+            playerVars: {
+                autoplay: 1,      // empieza a reproducir silenciado
+                mute: 1,          // obligatorio para autoplay
+                controls: 0,
+                disablekb: 1,
+                playsinline: 1,
+                modestbranding: 1,
+                rel: 0
+            },
+            events: {
+                'onReady': onPlayerReady
+            }
+        });
+    }
 
-    setTimeout(() => {
-        player.unMute();
-        player.setVolume(100);
-    }, 3000);
-}
+    function onPlayerReady(event) {
+        // El video ya se está reproduciendo (en mute)
+        event.target.playVideo();
+        // Podemos ocultar el mensaje de carga si queremos
+        statusDiv.innerHTML = '✅ Reproductor listo. <span>Haz clic en el vinilo</span> para escuchar el sonido.';
+    }
 </script>
 
 </body>
